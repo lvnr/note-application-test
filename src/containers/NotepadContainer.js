@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Row, Col } from 'antd'
 import styled from 'styled-components'
 import { getNotebooks, createNotebook, updateNotebook, deleteNotebook } from '../api'
 import Notepad from '../components/Notepad'
@@ -19,8 +18,6 @@ class NotepadContainer extends Component {
   }
 
   componentDidMount() {
-    // const notebook = await createNotebook('testing1', { 'Note 1': { content: 'test note body' } })
-    // const deleted = await deleteNotebook("f2fcb95d99a5e0f24b64578fd9c6f5db")
     this.fetchNotepads()
   }
 
@@ -31,7 +28,6 @@ class NotepadContainer extends Component {
 
   render() {
     const { notebooks, loading } = this.state
-    console.log(notebooks);
 
     return (
       <Wrapper>
