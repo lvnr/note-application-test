@@ -8,12 +8,12 @@ const Wrapper = styled.div`
   margin-bottom: 25px;
 `
 
-const Note = ({ note }) => {
+const Note = ({ note, deleteNote }) => {
   return (
     <Wrapper>
       <input type="text" placeholder="Enter note title..." defaultValue={note.title} />
       <textarea placeholder="Enter note..." defaultValue={note.note} />
-      <Button color="#EC3646">Delete</Button>
+      <Button color="#EC3646" onClick={() => deleteNote(note.title)}>Delete</Button>
     </Wrapper>
   )
 }

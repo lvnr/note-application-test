@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { getNotebooks, createNotebook, updateNotebook, deleteNotebook } from '../api'
-import NoteContainer from '../containers/NoteContainer'
+import Note from './Note'
 import Button from './Button'
 
 const Wrapper = styled.div`
@@ -40,8 +40,8 @@ class Notepad extends Component {
     super(props)
 
     this.state = {
-      title: this.props.notepad.description,
-      files: this.props.notepad.files,
+      title: this.props.notepad ? this.props.notepad.description : '',
+      files: this.props.notepad ? this.props.notepad.files : {},
       newNoteTitle: '',
       newNoteContent: '',
     }
@@ -51,12 +51,24 @@ class Notepad extends Component {
     const { title, files } = this.state
     const { id } = this.props.notepad
     const updatedNotes = {}
+
+    if (title.length > 255 || title.length <= 0) {
+      console.error('Notepad title should be between 1 and 255 characters')
+      return
+    }
+
+    if (Object.keys(files).length <= 0) {
+      console.error('Notepad should have at least one note')
+      return
+    }
+
     for (const title in files) {
       updatedNotes[title] = {
         filename: title,
         content: files[title].content,
       }
     }
+
     await updateNotebook(id, title, updatedNotes)
     this.props.fetchNotepads()
   }
@@ -79,16 +91,23 @@ class Notepad extends Component {
   }
 
   addNote = async () => {
-    const { title, newNoteTitle, newNoteContent } = this.state
+    const { title, newNoteTitle, newNoteContent, files } = this.state
     const { id } = this.props.notepad
 
-    if (newNoteTitle.length > 255) {
-      console.error('Note title should not be more than 255 characters')
+    if (newNoteTitle.length > 255 || newNoteTitle.length <= 0) {
+      console.error('Note title should be between 1 and 255 characters')
       return
     }
 
-    if (newNoteContent.length > 1000) {
-      console.error('Note should not be more than 1000 characters')
+    for (const filename in files) {
+      if (filename === newNoteTitle) {
+        console.error('Note title should be unique')
+        return
+      }
+    }
+
+    if (newNoteContent.length > 1000 || newNoteContent.length <= 0) {
+      console.error('Note should be between 1 and 1000 characters')
       return
     }
 
@@ -98,9 +117,21 @@ class Notepad extends Component {
         content: newNoteContent,
       },
     }
+
     await updateNotebook(id, title, notes)
+
     this.setState({ newNoteTitle: '', newNoteContent: '' })
-    this.props.fetchNotepads()
+  }
+
+  deleteNote = async (noteTitle) => {
+    const { title } = this.state
+    const { id } = this.props.notepad
+
+    const notes = {
+      [noteTitle]: { filename: null, content: '' },
+    }
+
+    await updateNotebook(id, title, notes)
   }
 
   render() {
@@ -167,7 +198,7 @@ class Notepad extends Component {
           </Button>
         </Section>
         <Section>
-          {notes && notes.map((note, i) => <NoteContainer key={i} note={note} />)}
+          {notes && notes.map((note, i) => <Note key={i} note={note} deleteNote={this.deleteNote} />)}
         </Section>
       </Wrapper>
     )
