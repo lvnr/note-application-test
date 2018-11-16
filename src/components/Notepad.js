@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Note from './Note'
+import NoteContainer from '../containers/NoteContainer'
 
 const Wrapper = styled.div`
   padding: 22px;
@@ -18,7 +18,16 @@ const Section = styled.section`
 `
 
 const Notepad = ({ notepad }) => {
-  const { files: notes } = notepad
+  const { files } = notepad
+  let notes = []
+
+  for (const title in files) {
+    if (files.hasOwnProperty(title)) {
+      notes.push({
+        title,
+      })
+    }
+  }
 
   return (
     <Wrapper>
@@ -35,7 +44,7 @@ const Notepad = ({ notepad }) => {
         <button>Add</button>
       </Section>
       <Section>
-        {notes.length > 0 && notes.map((note, i) => <Note key={i} note={note} />)}
+        {notes && notes.map((note, i) => <NoteContainer key={i} note={note} />)}
       </Section>
     </Wrapper>
   )
