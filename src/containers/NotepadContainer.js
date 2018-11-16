@@ -31,7 +31,12 @@ class NotepadContainer extends Component {
 
     return (
       <Wrapper>
-        {notebooks && notebooks.map((notepad, i) => <Notepad key={i} notepad={notepad} />)}
+        {notebooks && notebooks.map((notepad, i) => (
+          <Notepad
+            key={i}
+            notepad={notepad}
+          />
+        ))}
       </Wrapper>
     )
   }

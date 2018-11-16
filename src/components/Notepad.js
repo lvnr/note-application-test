@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
+import { getNotebooks, createNotebook, updateNotebook, deleteNotebook } from '../api'
 import NoteContainer from '../containers/NoteContainer'
 import Button from './Button'
 
@@ -26,6 +27,7 @@ const Section = styled.section`
   display: flex;
   flex-direction: column;
   margin-bottom: 25px;
+  max-width: 500px;
 
   h2 {
     font-size: 18px;
@@ -33,42 +35,121 @@ const Section = styled.section`
   }
 `
 
-const Notepad = ({ notepad }) => {
-  const { files } = notepad
-  let notes = []
+class Notepad extends Component {
+  constructor(props) {
+    super(props)
 
-  for (const title in files) {
-    if (files.hasOwnProperty(title)) {
-      notes.push({
-        title,
-        note: files[title].content,
-      })
+    this.state = {
+      title: this.props.notepad.description,
+      files: this.props.notepad.files,
+      newNoteTitle: '',
+      newNoteContent: '',
     }
   }
 
-  return (
-    <Wrapper>
-      <Header>
+  updateNotepad = async () => {
+    const { title, notes } = this.state
+    const { id } = this.props.notepad
+    const updatedNotes = {}
+    for (const title in notes) {
+      updatedNotes[title] = {
+        filename: title,
+        content: notes[title].content,
+      }
+    }
+    await updateNotebook(id, title, notes)
+  }
+
+  deleteNotepad = async (id, title, notes) => {
+    await deleteNotebook(id)
+  }
+
+  handleTitleUpdate = (e) => {
+    this.setState({ title: e.target.value })
+  }
+
+  handleNewNoteTitleUpdate = (e) => {
+    this.setState({ newNoteTitle: e.target.value })
+  }
+
+  handleNewNoteContentUpdate = (e) => {
+    this.setState({ newNoteContent: e.target.value })
+  }
+
+  addNote = () => {
+    // await updateNotebook(id, title, notes)
+    this.setState({ newNoteTitle: '', newNoteContent: '' })
+  }
+
+  render() {
+    const { deleteNotepad, updateNotepad } = this.props
+    const { files } = this.state
+    let notes = []
+
+    for (const title in files) {
+      if (files.hasOwnProperty(title)) {
+        notes.push({
+          title,
+          note: files[title].content,
+        })
+      }
+    }
+
+    return (
+      <Wrapper>
+        <Header>
+          <Section>
+            <label>Notepad title</label>
+            <input
+              type="text"
+              onChange={this.handleTitleUpdate}
+              placeholder="My notepad title..."
+              value={this.state.title}
+            />
+          </Section>
+          <Controls>
+            <Button
+              color="#39ACDC"
+              style={{ marginRight: 10 }}
+              onClick={this.updateNotepad}
+            >
+              Save
+            </Button>
+            <Button
+              color="#EC3646"
+              onClick={this.deleteNotepad}
+            >
+              Delete
+            </Button>
+          </Controls>
+        </Header>
         <Section>
-          <label>Notepad title</label>
-          <input type="text" placeholder="My notepad title..." />
+          <h2>My Notes</h2>
+          <input
+            type="text"
+            onChange={this.handleNewNoteTitleUpdate}
+            placeholder="Enter note title..."
+            value={this.state.newNoteTitle}
+          />
+          <textarea
+            rows="5"
+            onChange={this.handleNewNoteContentUpdate}
+            placeholder="Enter note..."
+            value={this.state.newNoteContent}
+          />
+          <Button
+            color="#57B93E"
+            onClick={this.addNote}
+          >
+            Add
+          </Button>
         </Section>
-        <Controls>
-          <Button color="#39ACDC" style={{ marginRight: 10 }}>Save</Button>
-          <Button color="#EC3646">Delete</Button>
-        </Controls>
-      </Header>
-      <Section>
-        <h2>My Notes</h2>
-        <input type="text" placeholder="Enter note title..." />
-        <textarea placeholder="Enter note..." />
-        <Button color="#57B93E">Add</Button>
-      </Section>
-      <Section>
-        {notes && notes.map((note, i) => <NoteContainer key={i} note={note} />)}
-      </Section>
-    </Wrapper>
-  )
+        <Section>
+          {notes && notes.map((note, i) => <NoteContainer key={i} note={note} />)}
+        </Section>
+      </Wrapper>
+    )
+  }
 }
 
 export default Notepad
