@@ -14,11 +14,23 @@ const getOptions = () => ({
   },
 })
 
+export const getNotebook = async (id) => {
+  try {
+    const response = await axios.get(`/gists/${id}`, getOptions())
+    const { data } = response
+    return data
+  } catch (error) {
+    console.error('Error getting notebooks: ', error);
+  }
+}
+
 export const getNotebooks = async () => {
   try {
     const response = await axios.get('/gists', getOptions())
-    const { data } = response
-    return data || []
+    // NOTE: this is not the most efficient approach,
+    // but can easily be refactored if not all of the notebooks need to be displayed at once
+    const notepads = await Promise.all(response.data.map(async (item) => await getNotebook(item.id)))
+    return notepads || []
   } catch (error) {
     console.error('Error getting notebooks: ', error);
   }
