@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { getNotebooks, createNotebook, updateNotebook, deleteNotebook } from '../api'
+import { getNotepads, createNotepad, updateNotepad, deleteNotepad } from '../api'
 import Notepad from '../components/Notepad'
 
 const Wrapper = styled.div`
@@ -13,7 +13,7 @@ class NotepadContainer extends Component {
 
     this.state = {
       loading: true,
-      notebooks: [],
+      Notepads: [],
     }
   }
 
@@ -22,16 +22,16 @@ class NotepadContainer extends Component {
   }
 
   fetchNotepads = async () => {
-    const notebooks = await getNotebooks()
-    this.setState({ notebooks, loading: false })
+    const Notepads = await getNotepads()
+    this.setState({ Notepads, loading: false })
   }
 
   render() {
-    const { notebooks, loading } = this.state
+    const { Notepads, loading } = this.state
 
     return (
       <Wrapper>
-        {notebooks && notebooks.map((notepad, i) => (
+        {Notepads && Notepads.map((notepad, i) => (
           <Notepad
             key={i}
             notepad={notepad}

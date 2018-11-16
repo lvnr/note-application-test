@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { getNotebooks, createNotebook, updateNotebook, deleteNotebook } from '../api'
+import { getNotepads, createNotepad, updateNotepad, deleteNotepad } from '../api'
 import Note from './Note'
 import Button from './Button'
 
@@ -69,12 +69,12 @@ class Notepad extends Component {
       }
     }
 
-    await updateNotebook(id, title, updatedNotes)
+    await updateNotepad(id, title, updatedNotes)
     this.props.fetchNotepads()
   }
 
   deleteNotepad = async () => {
-    await deleteNotebook(this.props.notepad.id)
+    await deleteNotepad(this.props.notepad.id)
     this.props.fetchNotepads()
   }
 
@@ -118,7 +118,7 @@ class Notepad extends Component {
       },
     }
 
-    await updateNotebook(id, title, notes)
+    await updateNotepad(id, title, notes)
 
     this.setState({ newNoteTitle: '', newNoteContent: '' })
   }
@@ -131,7 +131,7 @@ class Notepad extends Component {
       [noteTitle]: { filename: null, content: '' },
     }
 
-    await updateNotebook(id, title, notes)
+    await updateNotepad(id, title, notes)
   }
 
   render() {

@@ -14,29 +14,29 @@ const getOptions = () => ({
   },
 })
 
-export const getNotebook = async (id) => {
+export const getNotepad = async (id) => {
   try {
     const response = await axios.get(`/gists/${id}`, getOptions())
     const { data } = response
     return data
   } catch (error) {
-    console.error('Error getting notebooks: ', error);
+    console.error('Error getting Notepads: ', error);
   }
 }
 
-export const getNotebooks = async () => {
+export const getNotepads = async () => {
   try {
     const response = await axios.get('/gists', getOptions())
     // NOTE: this is not the most efficient approach,
-    // but can easily be refactored if not all of the notebooks need to be displayed at once
-    const notepads = await Promise.all(response.data.map(async (item) => await getNotebook(item.id)))
+    // but can easily be refactored if not all of the Notepads need to be displayed at once
+    const notepads = await Promise.all(response.data.map(async (item) => await getNotepad(item.id)))
     return notepads || []
   } catch (error) {
-    console.error('Error getting notebooks: ', error);
+    console.error('Error getting Notepads: ', error);
   }
 }
 
-export const createNotebook = async (title, notes) => {
+export const createNotepad = async (title, notes) => {
   try {
     const body = {
       public: true,
@@ -47,28 +47,28 @@ export const createNotebook = async (title, notes) => {
     const { data } = response
     return data || null
   } catch (error) {
-    console.error('Error creating a notebook: ', error);
+    console.error('Error creating a Notepad: ', error);
   }
 }
 
-export const updateNotebook = async (notebook_id, title, notes) => {
+export const updateNotepad = async (Notepad_id, title, notes) => {
   try {
     const body = {
       description: title,
       files: notes,
     }
-    const response = await axios.patch(`/gists/${notebook_id}`, body, getOptions())
+    const response = await axios.patch(`/gists/${Notepad_id}`, body, getOptions())
     const { data } = response
     return data || null
   } catch (error) {
-    console.error('Error updating notebook: ', error);
+    console.error('Error updating Notepad: ', error);
   }
 }
 
-export const deleteNotebook = async (notebook_id) => {
+export const deleteNotepad = async (Notepad_id) => {
   try {
-    return await axios.delete(`/gists/${notebook_id}`, getOptions())
+    return await axios.delete(`/gists/${Notepad_id}`, getOptions())
   } catch (error) {
-    console.error('Error deleting notebook: ', error);
+    console.error('Error deleting Notepad: ', error);
   }
 }
