@@ -1,10 +1,15 @@
 import React, { Component } from 'react'
-import './App.css'
+import NotepadContainer from './containers/NotepadContainer'
 
 class App extends Component {
   render() {
     return (
-      <div />
+      <div>
+        <header>Notepad Application</header>
+        <main>
+          <NotepadContainer />
+        </main>
+      </div>
     )
   }
 }

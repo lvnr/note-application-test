@@ -5,7 +5,7 @@ const AUTH_TOKEN = '45cd630f4c3ab6b629a79767c44b50eb171ce4d4'
 
 const getOptions = () => ({
   baseURL: 'https://api.github.com',
-  timeout: 5000,
+  timeout: 20000,
   mode: 'cors',
   headers: {
     Authorization: `token ${AUTH_TOKEN}`,
