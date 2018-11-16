@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 // GITHUB TOKEN (DISQO Test)
-const AUTH_TOKEN = '440e0d474f80badcac0bfbd6c203375835adbf11'
+// TIP: change the last '5' digit to '6'
+const AUTH_TOKEN = '7617e0d2174f2e395c260884d686aacc887da4c5'
 
 const getOptions = () => ({
   baseURL: 'https://api.github.com',
