@@ -81,6 +81,17 @@ class Notepad extends Component {
   addNote = async () => {
     const { title, newNoteTitle, newNoteContent } = this.state
     const { id } = this.props.notepad
+
+    if (newNoteTitle.length > 255) {
+      console.error('Note title should not be more than 255 characters')
+      return
+    }
+
+    if (newNoteContent.length > 1000) {
+      console.error('Note should not be more than 1000 characters')
+      return
+    }
+
     const notes = {
       [newNoteTitle]: {
         filename: newNoteTitle,
