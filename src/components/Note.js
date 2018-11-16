@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Button from './Button'
 
 const Wrapper = styled.div`
   display: flex;
@@ -7,12 +8,11 @@ const Wrapper = styled.div`
 `
 
 const Note = ({ note }) => {
-  console.log(note);
   return (
     <Wrapper>
-      <input type="text" placeholder="Enter note title..." value={note.filename} />
-      <textarea placeholder="Enter note..." value={note.content} />
-      <button>Delete</button>
+      <input type="text" placeholder="Enter note title..." defaultValue={note.title} />
+      <textarea placeholder="Enter note..." defaultValue={note.note} />
+      <Button color="#EC3646">Delete</Button>
     </Wrapper>
   )
 }
