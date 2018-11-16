@@ -48,20 +48,22 @@ class Notepad extends Component {
   }
 
   updateNotepad = async () => {
-    const { title, notes } = this.state
+    const { title, files } = this.state
     const { id } = this.props.notepad
     const updatedNotes = {}
-    for (const title in notes) {
+    for (const title in files) {
       updatedNotes[title] = {
         filename: title,
-        content: notes[title].content,
+        content: files[title].content,
       }
     }
-    await updateNotebook(id, title, notes)
+    await updateNotebook(id, title, updatedNotes)
+    this.props.fetchNotepads()
   }
 
   deleteNotepad = async (id, title, notes) => {
     await deleteNotebook(id)
+    this.props.fetchNotepads()
   }
 
   handleTitleUpdate = (e) => {
@@ -76,9 +78,18 @@ class Notepad extends Component {
     this.setState({ newNoteContent: e.target.value })
   }
 
-  addNote = () => {
-    // await updateNotebook(id, title, notes)
+  addNote = async () => {
+    const { title, newNoteTitle, newNoteContent } = this.state
+    const { id } = this.props.notepad
+    const notes = {
+      [newNoteTitle]: {
+        filename: newNoteTitle,
+        content: newNoteContent,
+      },
+    }
+    await updateNotebook(id, title, notes)
     this.setState({ newNoteTitle: '', newNoteContent: '' })
+    this.props.fetchNotepads()
   }
 
   render() {

@@ -18,9 +18,13 @@ class NotepadContainer extends Component {
     }
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     // const notebook = await createNotebook('testing1', { 'Note 1': { content: 'test note body' } })
     // const deleted = await deleteNotebook("f2fcb95d99a5e0f24b64578fd9c6f5db")
+    this.fetchNotepads()
+  }
+
+  fetchNotepads = async () => {
     const notebooks = await getNotebooks()
     this.setState({ notebooks, loading: false })
   }
@@ -35,6 +39,7 @@ class NotepadContainer extends Component {
           <Notepad
             key={i}
             notepad={notepad}
+            fetchNotepads={this.fetchNotepads}
           />
         ))}
       </Wrapper>
