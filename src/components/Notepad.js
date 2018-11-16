@@ -73,8 +73,8 @@ class Notepad extends Component {
     this.props.fetchNotepads()
   }
 
-  deleteNotepad = async (id, title, notes) => {
-    await deleteNotebook(id)
+  deleteNotepad = async () => {
+    await deleteNotebook(this.props.notepad.id)
     this.props.fetchNotepads()
   }
 
